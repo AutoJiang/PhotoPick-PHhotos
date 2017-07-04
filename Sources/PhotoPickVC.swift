@@ -119,12 +119,10 @@ public class PhotoPickVC: UIViewController, UICollectionViewDelegate, UICollecti
             self.confirmOnClick()
         }
         
-        navigationController?.navigationBar.barTintColor = PhotoPickConfig.shared.NavBarColor
-        
         // 获取数据
         switch sourceType {
         case .all:
-            setupNavBarForSourceTypeAll()
+            setupNavigationItemsForSourceTypeAll()
             groupManager.findAllPhotoModels { [unowned self] (models) in
                 self.photoModels = models
             }
@@ -142,21 +140,10 @@ public class PhotoPickVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     
     
-    private func setupNavBarForSourceTypeAll(){
-        let btnL = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 30))
-        btnL.setTitle("取消", for: .normal)
-        btnL.setTitleColor(UIColor.black, for: .normal)
-        btnL.addTarget(self, action: #selector(concelBtnOnClick), for: .touchUpInside)
-        let leftBar = UIBarButtonItem(customView: btnL)
-        self.navigationItem.leftBarButtonItem = leftBar
-        
-        let btnR = UIButton(frame: CGRect(x: 0, y: 0, width: 50, height: 30))
-        btnR.setTitle("相册", for: .normal)
-        btnR.setTitleColor(UIColor.black, for: .normal)
-        btnR.addTarget(self, action: #selector(openGroupPhotoVC), for: .touchUpInside)
-        
-        let rightBar = UIBarButtonItem(customView: btnR)
-        self.navigationItem.rightBarButtonItem = rightBar
+    private func setupNavigationItemsForSourceTypeAll(){
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "取消", style: .plain, target: self, action: #selector(cancelBtnOnClick))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "相册", style: .plain, target: self, action: #selector(openGroupPhotoVC))
+
     }
     
     // 打开相册列表
@@ -189,7 +176,7 @@ public class PhotoPickVC: UIViewController, UICollectionViewDelegate, UICollecti
         dismissVC(isCancel: false)
     }
     
-    @objc private func concelBtnOnClick() {
+    @objc private func cancelBtnOnClick() {
         dismissVC(isCancel: true)
     }
     

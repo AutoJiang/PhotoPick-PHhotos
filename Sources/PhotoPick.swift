@@ -19,14 +19,14 @@ public enum PhotoPickType {
 
 public protocol PhotoPickDelegate: class {
     
-    func photoPick(pothoPick: PhotoPick, assetImages: [PickedPhoto]) -> Void
+    func photoPick(photoPick: PhotoPick, assetImages: [PickedPhoto]) -> Void
     
-    func photoPickCancel(pothoPick: PhotoPick) -> Void
+    func photoPickCancel(photoPick: PhotoPick) -> Void
 }
 
 public extension PhotoPickDelegate {
     
-    func photoPickCancel(pothoPick: PhotoPick) -> Void{}
+    func photoPickCancel(photoPick: PhotoPick) -> Void{}
 }
 
 
@@ -51,7 +51,7 @@ public class PhotoPick: NSObject, PhotoPickVCDelegate, UIImagePickerControllerDe
             }
             let pv =  PhotoPickVC(isShowCamera: false, maxSelectImagesCount: count)
             pv.delegate = self
-            let nav = UINavigationController(rootViewController: pv)
+            let nav = defaultNavigationController(pv)
             fromVC.present(nav, animated: true, completion: nil)
             
         case .editedSinglePhoto:
@@ -59,9 +59,9 @@ public class PhotoPick: NSObject, PhotoPickVCDelegate, UIImagePickerControllerDe
                 return
             }
             let imagePC = UIImagePickerController()
-            imagePC.allowsEditing = true
             imagePC.delegate = self
             imagePC.sourceType = .photoLibrary
+            imagePC.allowsEditing = PhotoPickConfig.shared.enableEdit
             fromVC.present(imagePC, animated: true, completion: nil)
             imagePick = imagePC
             
@@ -71,7 +71,7 @@ public class PhotoPick: NSObject, PhotoPickVCDelegate, UIImagePickerControllerDe
             }
             let pv =  PhotoPickVC(isShowCamera: true, maxSelectImagesCount: count)
             pv.delegate = self
-            let nav = UINavigationController(rootViewController: pv)
+            let nav = defaultNavigationController(pv)
             fromVC.present(nav, animated: true, completion: nil)
             
         case .systemCamera:
@@ -79,9 +79,9 @@ public class PhotoPick: NSObject, PhotoPickVCDelegate, UIImagePickerControllerDe
                 return
             }
             let imagePC = UIImagePickerController()
-            imagePC.allowsEditing = true
             imagePC.delegate = self
             imagePC.sourceType = .camera
+            imagePC.allowsEditing = PhotoPickConfig.shared.enableEdit
             fromVC.present(imagePC, animated: true, completion: nil)
             imagePick = imagePC
         }
@@ -118,17 +118,34 @@ public class PhotoPick: NSObject, PhotoPickVCDelegate, UIImagePickerControllerDe
         return true
     }
     
+    private func defaultNavigationController(_ root: UIViewController) -> UINavigationController {
+        let navi = UINavigationController(rootViewController: root)
+        navi.navigationBar.tintColor = PhotoPickConfig.shared.NaviBarTintColor
+        navi.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: PhotoPickConfig.shared.NaviBarTintColor]
+        navi.navigationBar.shadowImage = UIImage()
+        navi.navigationBar.barStyle = .black
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 1, height: 1), false, UIScreen.main.scale)
+        let context = UIGraphicsGetCurrentContext()
+        context?.setFillColor(PhotoPickConfig.shared.NaviBarColor.cgColor)
+        context?.fill(CGRect(x: 0, y: 0, width: 1, height: 1))
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        navi.navigationBar.setBackgroundImage(image, for: .default)
+        navi.navigationBar.isTranslucent = true
+        return navi
+    }
+    
     
     ///MARK: PhotoPickVCDelegate
     func photoPick(pickVC: PhotoPickVC, assetImages: [PickedPhoto]) {
         if let delegate = self.delegate {
-            delegate.photoPick(pothoPick: self, assetImages: assetImages)
+            delegate.photoPick(photoPick: self, assetImages: assetImages)
         }
     }
     
     func photoPickCancel(pickVC: PhotoPickVC) {
         if let delegate = self.delegate {
-            delegate.photoPickCancel(pothoPick: self)
+            delegate.photoPickCancel(photoPick: self)
         }
     }
     
@@ -141,13 +158,13 @@ public class PhotoPick: NSObject, PhotoPickVCDelegate, UIImagePickerControllerDe
         picker.dismiss(animated: true, completion: nil)
         let model = PickedPhoto(image: image )
         if let delegate = self.delegate {
-            delegate.photoPick(pothoPick: self, assetImages: [model])
+            delegate.photoPick(photoPick: self, assetImages: [model])
         }
     }
 
     public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         if let delegate = self.delegate {
-            delegate.photoPickCancel(pothoPick: self)
+            delegate.photoPickCancel(photoPick: self)
         }
         guard let vc = imagePick else {
             return
