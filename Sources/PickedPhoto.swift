@@ -7,102 +7,95 @@
 //
 
 import UIKit
-import AssetsLibrary
-
+import Photos
+import MobileCoreServices
 public class PickedPhoto: NSObject {
     enum PhotoType {
-        case asset(asset: ALAsset)
+        case asset(asset: PHAsset)
         case image(image: UIImage)
     }
     
-    private var asset: ALAsset?
+    private var asset: PHAsset?
     private var privateImage: UIImage?
     private let maxSidePixels: CGFloat = 1280
     private let minStretchSidePixels: CGFloat = 440
     
-    static let path = "/Documents/PhotoPick/"
-    
     ///原图
-    public var originalImage: UIImage {
-        get{
-            if let privateImage = privateImage {
-                return privateImage
-            }
-            
-            return AssetTool.imageFromAsset(representation: asset!.defaultRepresentation())!
+    public func originalImage(callBack:@escaping ((UIImage?) -> Void)) -> Void {
+        guard let asset = asset else {
+            callBack(privateImage)
+            return
+        }
+        let option = PHImageRequestOptions()
+        option.resizeMode = .fast;
+        option.isNetworkAccessAllowed = true
+        //param：targetSize 即你想要的图片尺寸，若想要原尺寸则可输入PHImageManagerMaximumSize
+        PHCachingImageManager.default().requestImage(for: asset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFit, options: option) { (image, info) in
+            callBack(image)
         }
     }
     
     ///返回压缩图 compress
-    public var image: UIImage? {
-        get{
-            return originalImage.scaleToMaxSidePixels(maxSidePixels: maxSidePixels, minStretchSidePixels: minStretchSidePixels)
+    public func image(callBack:@escaping ((UIImage?) -> Void)) -> Void {
+        guard let asset = asset else {
+            callBack(privateImage?.scaleToMaxSidePixels(maxSidePixels: self.maxSidePixels, minStretchSidePixels: self.maxSidePixels))
+            return
         }
+        let option = PHImageRequestOptions()
+        option.resizeMode = .fast;
+        option.isNetworkAccessAllowed = true
+        //param：targetSize 即你想要的图片尺寸，若想要原尺寸则可输入PHImageManagerMaximumSize
+        let quality = PhotoPickConfig.shared.jpgQuality
+        let size = CGSize(width: CGFloat(asset.pixelWidth)*quality, height: CGFloat(asset.pixelHeight)*quality)
+        
+        PHCachingImageManager.default().requestImage(for: asset, targetSize: size, contentMode: .aspectFit, options: option) { (image, info) in
+            callBack(image)
+        }
+//        originalImage { [unowned self] image in
+//            let compress = image
+
+//            callBack(image?.scaleToMaxSidePixels(maxSidePixels: self.maxSidePixels, minStretchSidePixels: self.minStretchSidePixels))
+//        }
     }
     
     ///是否为gif图
-    public var isGIF: Bool {
-        get{
-            return asset?.defaultRepresentation().filename().components(separatedBy: ".").last == "GIF"
-        }
-    }
+    public var isGIF: Bool
     
     ///若是gif, 使用Data数据流传输到服务器，注意该数据是原始未压缩的数据
-    public var data: Data {
-        get{
-            if let asset = asset{
-                return AssetTool.dataFromAsset(representation: (asset.defaultRepresentation())!)
-            }
-            return UIImagePNGRepresentation(privateImage!)!
+    func data(callBack: @escaping ((Data?) -> Void)) {
+        guard let asset = asset else {
+            callBack(UIImagePNGRepresentation(privateImage!))
+            return
         }
-    }
-    
-    public var name: String {
-        get{
-            if let asset = asset{
-                return asset.defaultRepresentation().filename()
+        let option = PHImageRequestOptions()
+        option.isNetworkAccessAllowed = true
+        PHCachingImageManager.default().requestImageData(for: asset, options: option) { (data, dataUTI, orientation, info) in
+            let isCancel = info?[PHImageCancelledKey] as! Bool
+            let isError = info?[PHImageErrorKey] as! Bool
+            let downloadFinined = !(isCancel && !isError)
+            if downloadFinined {
+                callBack(data)
             }
-            let date = Date(timeIntervalSinceNow: 0)
-            return "\(date.timeIntervalSince1970).jpg"
-        }
-    }
-    
-    public var imagePath: String {
-        get{
-            let fileManager = FileManager.default
-            let directPath = NSHomeDirectory() + PickedPhoto.path
-            if !fileManager.fileExists(atPath: directPath){
-                do {
-                    try fileManager.createDirectory(atPath: directPath, withIntermediateDirectories: true, attributes: nil)
-                } catch {
-                }
-            }
-            let imagePath: String = directPath + name
-            
-            // gif图不能压缩
-            let data = isGIF ? self.data : UIImageJPEGRepresentation(originalImage, PhotoPickConfig.shared.jpgQuality)
-            
-            fileManager.createFile(atPath: imagePath, contents: data, attributes: nil)
-            return "file://" + imagePath
         }
     }
     
     ///相册获取的图片
-    init(asset : ALAsset) {
+    init(asset: PHAsset) {
         self.asset = asset
-    }
-    
-    ///用于拍照时获取的图片
-    init(image: UIImage) {
-        self.privateImage = image
-    }
-    
-    static func clearDisk(){
-        let fileManager = FileManager.default
-        let imagesPath: String = NSHomeDirectory() + PickedPhoto.path
-            do {
-                try fileManager.removeItem(atPath: imagesPath)
-            } catch {
+        self.isGIF = false
+        super.init()
+        let option = PHImageRequestOptions()
+        option.isNetworkAccessAllowed = true
+        PHCachingImageManager.default().requestImageData(for: asset, options: option) { [weak self] (data, dataUTI, orientation, info) in
+            if let type = dataUTI {
+                self?.isGIF = type == kUTTypeGIF as String
+            }
         }
     }
+    //用于拍照时获取的图片
+    init(image: UIImage) {
+        self.privateImage = image
+        self.isGIF = false
+    }
+    
 }

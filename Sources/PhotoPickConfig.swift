@@ -46,7 +46,7 @@ public class PhotoPickConfig: NSObject {
     public var needShowOrder: Bool = true
     
     /// 是否自动清理图片文件缓存
-    public var isAutoClearDisk: Bool = true
+//    public var isAutoClearDisk: Bool = true
     
     //控件颜色
     public var tintColor: UIColor = UIColor.orange

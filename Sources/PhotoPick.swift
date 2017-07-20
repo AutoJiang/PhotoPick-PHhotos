@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 import AssetsLibrary
+import Photos
 
 public enum PhotoPickType {
     case editedSinglePhoto //需要编辑成方形图片的单张图片
@@ -46,7 +47,7 @@ public class PhotoPick: NSObject, PhotoPickVCDelegate, UIImagePickerControllerDe
         switch type {
             
         case .normal:
-            if !isALAssetsLibraryAvailable(from: fromVC) {
+            if !PhotoPick.isALAssetsLibraryAvailable(from: fromVC) {
                 return
             }
             let pv =  PhotoPickVC(isShowCamera: false, maxSelectImagesCount: count)
@@ -55,7 +56,7 @@ public class PhotoPick: NSObject, PhotoPickVCDelegate, UIImagePickerControllerDe
             fromVC.present(nav, animated: true, completion: nil)
             
         case .editedSinglePhoto:
-            if !isALAssetsLibraryAvailable(from: fromVC) {
+            if !PhotoPick.isALAssetsLibraryAvailable(from: fromVC) {
                 return
             }
             let imagePC = UIImagePickerController()
@@ -66,7 +67,7 @@ public class PhotoPick: NSObject, PhotoPickVCDelegate, UIImagePickerControllerDe
             imagePick = imagePC
             
         case .showCamera:
-            if !isALAssetsLibraryAvailable(from: fromVC) || !isCameraAvailable(from: fromVC){
+            if !PhotoPick.isALAssetsLibraryAvailable(from: fromVC){
                 return
             }
             let pv =  PhotoPickVC(isShowCamera: true, maxSelectImagesCount: count)
@@ -75,7 +76,7 @@ public class PhotoPick: NSObject, PhotoPickVCDelegate, UIImagePickerControllerDe
             fromVC.present(nav, animated: true, completion: nil)
             
         case .systemCamera:
-            if !isCameraAvailable(from: fromVC){
+            if !PhotoPick.isCameraAvailable(from: fromVC){
                 return
             }
             let imagePC = UIImagePickerController()
@@ -94,7 +95,7 @@ public class PhotoPick: NSObject, PhotoPickVCDelegate, UIImagePickerControllerDe
         from.present(alertController, animated: true, completion: nil)
     }
     
-    private func isALAssetsLibraryAvailable(from: UIViewController) -> Bool {
+    internal static func isALAssetsLibraryAvailable(from: UIViewController) -> Bool {
         let authStatus = ALAssetsLibrary.authorizationStatus()
         if authStatus == .restricted || authStatus == .denied {
             PhotoPick.showOneCancelButtonAlertView(from: from, title: "相册无法打开", subTitle: "应用相册权限受限,请在设置中启用")
@@ -103,7 +104,7 @@ public class PhotoPick: NSObject, PhotoPickVCDelegate, UIImagePickerControllerDe
         return true
     }
     
-    private func isCameraAvailable(from: UIViewController) -> Bool {
+    internal static func isCameraAvailable(from: UIViewController) -> Bool {
         guard UIImagePickerController.isCameraDeviceAvailable(.rear) else {
             PhotoPick.showOneCancelButtonAlertView(from: from, title: "摄像头无法使用", subTitle: nil)
             return false
@@ -152,14 +153,19 @@ public class PhotoPick: NSObject, PhotoPickVCDelegate, UIImagePickerControllerDe
     ///MARK: UIImagePickerControllerDelegate
 
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        guard let image = info[UIImagePickerControllerOriginalImage] as? UIImage else {
+        let url = info[UIImagePickerControllerReferenceURL] as! String
+
+        picker.dismiss(animated: true, completion: nil)
+        
+        let result = PHAsset.fetchAssets(withALAssetURLs: [URL(fileURLWithPath: url)], options: nil)
+        guard let delegate = self.delegate else {
             return
         }
-        picker.dismiss(animated: true, completion: nil)
-        let model = PickedPhoto(image: image )
-        if let delegate = self.delegate {
+        if let asset = result.firstObject {
+            let model = PickedPhoto(asset: asset)
             delegate.photoPick(photoPick: self, assetImages: [model])
         }
+        
     }
 
     public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
@@ -172,9 +178,4 @@ public class PhotoPick: NSObject, PhotoPickVCDelegate, UIImagePickerControllerDe
         vc.dismiss(animated: true, completion: nil)
     }
     
-    deinit {
-        if PhotoPickConfig.shared.isAutoClearDisk {
-            PickedPhoto.clearDisk()
-        }
-    }
 }

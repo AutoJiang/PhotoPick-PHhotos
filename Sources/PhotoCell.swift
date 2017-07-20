@@ -23,7 +23,7 @@ class PhotoCell: UICollectionViewCell {
         addSubview(indexLbl)
     }
     
-    public func bind(image: UIImage){
+    public func bind(image: UIImage?){
         iv.image = image
     }
     
@@ -46,6 +46,8 @@ class PhotoCell: UICollectionViewCell {
     private lazy var iv: UIImageView = {
         let v = UIImageView()
         v.frame = self.bounds
+        v.contentMode = .scaleAspectFill
+        v.clipsToBounds = true
         return v
     }()
     

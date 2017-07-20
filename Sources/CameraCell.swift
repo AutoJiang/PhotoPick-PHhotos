@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 class CameraCell: UICollectionViewCell, UIImagePickerControllerDelegate, UINavigationControllerDelegate  {
     
@@ -34,26 +35,32 @@ class CameraCell: UICollectionViewCell, UIImagePickerControllerDelegate, UINavig
     }
     
     func tapGesture() {
-        if let vc = host {
-            let controller = UIImagePickerController()
-            controller.sourceType = .camera
-            controller.delegate = self
-            vc.present(controller, animated: true, completion: nil)
+        guard let vc = host else {
+            return
         }
+        if !PhotoPick.isCameraAvailable(from: vc){
+            return
+        }
+        let controller = UIImagePickerController()
+        controller.sourceType = .camera
+        controller.delegate = self
+        vc.present(controller, animated: true, completion: nil)
 
     }
     // MARK: - UIImagePickerControllerDelegate
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if picker.sourceType == .camera {
-
             let image = info[UIImagePickerControllerOriginalImage] as! UIImage
-            
-            //图片存入相册
-            //UIImageWriteToSavedPhotosAlbum( image, nil, nil, nil);
+//            let url = info[UIImagePickerControllerReferenceURL] as! URL
+//            let result = PHAsset.fetchAssets(withALAssetURLs: [URL(fileURLWithPath: url)], options: nil)
+//            if let asset = result.firstObject {
+//                let assetimage = PickedPhoto(asset: asset)
+//                doneTakePhoto([assetimage])
+//            }
+//            PHAssetResourceManager.default()
             
             let assetimage = PickedPhoto(image: image)
             doneTakePhoto([assetimage])
-            
         }
     }
 }

@@ -8,82 +8,79 @@
 
 import Foundation
 import AssetsLibrary
+import Photos
 
 class PhotoGroup {
     
     var assetModels: [PhotoModel]?
-    var assetGroup: ALAssetsGroup
+    var assetGroup: PHAssetCollection
     
-    init(assetGroup:ALAssetsGroup) {
+    init(assetGroup: PHAssetCollection) {
         self.assetGroup = assetGroup
     }
     
-    func name() -> String {
-        return assetGroup.value(forProperty: ALAssetsGroupPropertyName) as! String
+    func name() -> String? {
+        let title = assetGroup.localizedTitle
+        if title == "Slo-mo" {
+            return "慢动作"
+        }else if title == "Recently Added" {
+            return "最近添加"
+        }else if title == "Favorites" {
+            return "最爱"
+        }else if title == "Recently Deleted" {
+            return "最近删除"
+        }else if title == "Videos" {
+            return "视频"
+        }else if title == "All Photos" {
+            return "所有照片"
+        }else if title == "Selfies" {
+            return "自拍"
+        }else if title == "Screenshots" {
+            return "屏幕快照"
+        }
+        else if title == "Camera Roll" {
+            return "相机胶卷"
+        }
+        return title
     }
     
 }
 
 class PhotoGroupManager {
-
-    private let library: ALAssetsLibrary = ALAssetsLibrary()
     
-    private func findAllGroups(groupType: UInt32, groupsCallback: @escaping ([PhotoGroup]) -> Void){
+    private func findAllGroups(groupType: PHAssetCollectionSubtype) -> [PhotoGroup] {
         var groups = Array<PhotoGroup>()
-        library.enumerateGroupsWithTypes(groupType, usingBlock:{
-            group, stop in
-            guard let g = group else {
-                if groups.count > 0 {
-                    //遍历
-                    groupsCallback(groups)
-                }else {
-                    print("没有相册列表")
-                }
-                return
-            }
-            g.setAssetsFilter(ALAssetsFilter.allPhotos())
-            if g.numberOfAssets() > 0 {
-                groups.append(PhotoGroup(assetGroup: g))
-            }
-        }, failureBlock: { error in
-            print("遍历失败")
+        let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: groupType, options: nil)
+        smartAlbums.enumerateObjects({ (collection, idx, stop) in
+            groups.append(PhotoGroup(assetGroup: collection))
         })
+        
+        return groups
     }
 
-    func findGroupGroupAll(groupsCallback: @escaping ([PhotoGroup]) -> Void){
-        findAllGroups(groupType: ALAssetsGroupAll, groupsCallback: groupsCallback)
+    func findGroupGroupAll() -> [PhotoGroup]{
+        return findAllGroups(groupType: .albumRegular)
     }
     
-    func findAllPhotoModelsByGroup(by group: PhotoGroup, callback: @escaping ([PhotoModel]) -> Void){
+//pragma mark - 获取指定相册内的所有图片
+    func findAllPhotoModelsByGroup(by group: PhotoGroup) -> [PhotoModel]{
         var photoModels = [PhotoModel]()
-        group.assetGroup.enumerateAssets(options: .reverse, using: { (result, index, stop) in
-            guard let r = result else{
-                callback(photoModels)
-                return
-            }
-            let model = PhotoModel(asset: r, isSelect: false)
-            photoModels.append(model)
+        let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        let result = PHAsset.fetchAssets(in: group.assetGroup, options: options)
+        result.enumerateObjects({ (obj, idx, stop) in
+            photoModels.append(PhotoModel(asset: obj, isSelect: false))
         })
+        return photoModels
     }
     
-    func findAllPhotoModels(callback: @escaping ([PhotoModel]) -> Void){
-        findAllGroups(groupType: ALAssetsGroupSavedPhotos, groupsCallback: {[unowned self]
-            groups in
-            for group in groups {
-                self.findAllPhotoModelsByGroup(by: group, callback: callback)
-            }
-        })
-    }
-    /*
-    func assetForURL(url:String, callback: @escaping (PhotoModel) -> Void){
-
-        library.asset(for: URL(string: url), resultBlock: { asset in
-            if let asset = asset {
-                let model = PhotoModel(asset: asset, isSelect: true)
-                callback(model)
-            }
+    func findAllPhotoModels() -> [PhotoModel]{
+        let groups = findAllGroups(groupType: .smartAlbumUserLibrary)
+        var photoModels = [PhotoModel]()
+        for group in groups {
+            let models = self.findAllPhotoModelsByGroup(by: group)
+            photoModels.append(contentsOf: models)
         }
-            , failureBlock: ALAssetsLibraryAccessFailureBlock!)
+        return photoModels
     }
-    */
 }

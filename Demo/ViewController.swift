@@ -50,12 +50,16 @@ class ViewController: UIViewController, PhotoPickDelegate {
                 }
                 
                 let iv = UIImageView(frame: CGRect(x: col * width, y: row * width, width: width, height: width))
-                let image : UIImage = photos[index].image!;
-                iv.image = image
+                let model = photos[index] as PickedPhoto
+
+                model.image(callBack: { image in
+                    iv.image = image
+                })
                 iv.contentMode = .scaleAspectFill
                 iv.clipsToBounds = true
                 view.addSubview(iv)
-                print(photos[index].imagePath)
+
+//                print(photos[index].imagePath)
             }
         }
     }
@@ -82,7 +86,7 @@ class ViewController: UIViewController, PhotoPickDelegate {
     }
     
     
-    func photoPick(pothoPick: PhotoPick, assetImages: [PickedPhoto]) {
+    func photoPick(photoPick: PhotoPick, assetImages: [PickedPhoto]) {
         self.showImages(photos: assetImages)
     }
     

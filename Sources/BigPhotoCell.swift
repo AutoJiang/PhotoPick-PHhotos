@@ -18,21 +18,20 @@ class BigPhotoCell: UICollectionViewCell,UIAccelerometerDelegate{
     }
     
     func bind(model:PhotoModel){
-        guard let representation = model.asset.defaultRepresentation() else {
-            return ;
+        model.image { (image) in
+            self.zoomScrollView.frame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: self.frame.size.height)
+            self.zoomScrollView.zoomScale = 1.0
+            // 将scrollview的contentSize还原成缩放前
+            
+            self.zoomScrollView.contentSize = CGSize(width: self.frame.size.width, height: self.frame.size.height)
+//            AssetTool.imageFromAsset(representation: representation)
+            self.zoomScrollView.zoomImageView.image = image
+            let width = self.frame.width
+            let height = (width * CGFloat(model.asset.pixelHeight)) / CGFloat(model.asset.pixelWidth)
+            self.zoomScrollView.zoomImageView.frame.size = CGSize(width: self.frame.width, height: height)
+            self.zoomScrollView.zoomImageView.center = CGPoint(x: width/2, y: self.frame.height/2)
         }
-        self.zoomScrollView.frame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: self.frame.size.height)
-        self.zoomScrollView.zoomScale = 1.0
-        // 将scrollview的contentSize还原成缩放前
-        
-        self.zoomScrollView.contentSize = CGSize(width: self.frame.size.width, height: self.frame.size.height)
-        
-        self.zoomScrollView.zoomImageView.image = AssetTool.imageFromAsset(representation: representation)
-        let dimension = representation.dimensions()
-        let width = self.frame.width
-        let height = (width * dimension.height) / dimension.width
-        self.zoomScrollView.zoomImageView.frame.size = CGSize(width: self.frame.width, height: height)
-        self.zoomScrollView.zoomImageView.center = CGPoint(x: width/2, y: self.frame.height/2)
+
     }
     
     required init?(coder aDecoder: NSCoder) {

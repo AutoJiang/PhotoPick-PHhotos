@@ -42,10 +42,7 @@ class PhotoPickGroupVC: UIViewController,UITableViewDelegate,UITableViewDataSour
         
         self.navigationItem.title = "照片"
         
-        mgr.findGroupGroupAll { [weak self] (groups) in
-            self?.groups = groups
-            self?.tableView.reloadData()
-        }
+        self.groups = mgr.findGroupGroupAll()
     }
 
 //MARK: UITableViewDataSourceDelegate
@@ -101,9 +98,10 @@ class GroupCell: UITableViewCell {
     
     func bind(model:PhotoGroup){
         self.textLabel?.text = model.name()
-        self.imageView?.image = UIImage(cgImage: model.assetGroup.posterImage().takeUnretainedValue()
-            , scale: 1.0, orientation: .up)
-        self.detailTextLabel?.text = "(\(model.assetGroup.numberOfAssets()))"
+
+//        self.imageView?.image = UIImage(cgImage: model.assetGroup.posterImage().takeUnretainedValue()
+//            , scale: 1.0, orientation: .up)
+        self.detailTextLabel?.text = "(\(model.assetGroup.estimatedAssetCount))"
     }
     
     required init?(coder aDecoder: NSCoder) {

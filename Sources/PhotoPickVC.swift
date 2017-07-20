@@ -123,14 +123,9 @@ public class PhotoPickVC: UIViewController, UICollectionViewDelegate, UICollecti
         switch sourceType {
         case .all:
             setupNavigationItemsForSourceTypeAll()
-            groupManager.findAllPhotoModels { [unowned self] (models) in
-                self.photoModels = models
-            }
-            
+            self.photoModels = groupManager.findAllPhotoModels()
         case let .group(photoGroup: group):
-            groupManager.findAllPhotoModelsByGroup(by: group, callback: { [unowned self] (models) in
-                self.photoModels = models
-            })
+            self.photoModels = groupManager.findAllPhotoModelsByGroup(by: group)
         }
         
         /// 注册通知，监听系统图片发生变化时，进行数据更新
@@ -213,7 +208,11 @@ public class PhotoPickVC: UIViewController, UICollectionViewDelegate, UICollecti
         let cell: PhotoCell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.identifier, for: indexPath) as! PhotoCell
         
         let model: PhotoModel = photoModels[getPhotoRow(indexPath: indexPath)]
-        cell.bind(image: model.image)
+        model.thumbnail { (image) in
+            cell.bind(image: image)
+        }
+//        cell.bind(image: model.thumbnail)
+        
         if model.isSelect {
             let index = self.selectedPhotoModels.index(of: model)
             cell.cellSelect(animated: model.isLastSelect, index: "\(index!+1)")
