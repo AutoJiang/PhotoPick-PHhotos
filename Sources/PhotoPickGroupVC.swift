@@ -94,14 +94,16 @@ class GroupCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.accessoryType = .disclosureIndicator
         self.addSubview(subtitle)
+
     }
     
     func bind(model:PhotoGroup){
         self.textLabel?.text = model.name()
-
-//        self.imageView?.image = UIImage(cgImage: model.assetGroup.posterImage().takeUnretainedValue()
-//            , scale: 1.0, orientation: .up)
-        self.detailTextLabel?.text = "(\(model.assetGroup.estimatedAssetCount))"
+        
+        self.imageView?.image = model.image
+        self.imageView?.contentMode = .scaleToFill
+        self.imageView?.clipsToBounds = true
+        self.detailTextLabel?.text = "(\(model.result.count))"
     }
     
     required init?(coder aDecoder: NSCoder) {

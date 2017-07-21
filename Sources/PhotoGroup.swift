@@ -12,15 +12,16 @@ import Photos
 
 class PhotoGroup {
     
-    var assetModels: [PhotoModel]?
-    var assetGroup: PHAssetCollection
+    private var title: String?
+//    var assetModels: [PhotoModel]?
+    var result: PHFetchResult<PHAsset>
     
-    init(assetGroup: PHAssetCollection) {
-        self.assetGroup = assetGroup
+    init(result: PHFetchResult<PHAsset>, title: String?) {
+        self.result = result
+        self.title = title
     }
     
     func name() -> String? {
-        let title = assetGroup.localizedTitle
         if title == "Slo-mo" {
             return "慢动作"
         }else if title == "Recently Added" {
@@ -44,6 +45,26 @@ class PhotoGroup {
         return title
     }
     
+    var image: UIImage? {
+        get{
+            guard let asset = result.firstObject else {
+                return nil
+            }
+            
+            let potions = PHImageRequestOptions()
+//            potions.isSynchronous = true
+            var imageV: UIImage?
+            PHCachingImageManager.default().requestImage(for: asset, targetSize: CGSize(width: 200, height: 200), contentMode: .aspectFill, options: nil) { (image, info ) in
+//                let isDegraded = info?[PHImageResultIsDegradedKey] as! Bool
+//                if !isDegraded {
+                    imageV = image
+//                }
+            }
+            return imageV
+        }
+    }
+    
+    
 }
 
 class PhotoGroupManager {
@@ -51,24 +72,26 @@ class PhotoGroupManager {
     private func findAllGroups(groupType: PHAssetCollectionSubtype) -> [PhotoGroup] {
         var groups = Array<PhotoGroup>()
         let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: groupType, options: nil)
+        let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         smartAlbums.enumerateObjects({ (collection, idx, stop) in
-            groups.append(PhotoGroup(assetGroup: collection))
+        let result = PHAsset.fetchAssets(in: collection, options: options)
+            if result.count > 0 {
+                groups.append(PhotoGroup(result: result, title: collection.localizedTitle))
+            }
         })
         
         return groups
     }
 
     func findGroupGroupAll() -> [PhotoGroup]{
-        return findAllGroups(groupType: .albumRegular)
+        return findAllGroups(groupType: .any)
     }
     
 //pragma mark - 获取指定相册内的所有图片
     func findAllPhotoModelsByGroup(by group: PhotoGroup) -> [PhotoModel]{
         var photoModels = [PhotoModel]()
-        let options = PHFetchOptions()
-        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        let result = PHAsset.fetchAssets(in: group.assetGroup, options: options)
-        result.enumerateObjects({ (obj, idx, stop) in
+        group.result.enumerateObjects({ (obj, idx, stop) in
             photoModels.append(PhotoModel(asset: obj, isSelect: false))
         })
         return photoModels
