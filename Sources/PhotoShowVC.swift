@@ -37,6 +37,8 @@ class PhotoShowVC: UIViewController, UICollectionViewDelegate, UICollectionViewD
     //弹出圆圈
     private var circelLbl = CircleLabel()
     
+    private var confirmBtn = UIButton()
+    
     private let maxSelectImagesCount: Int
     
     init(assets: [PhotoModel], selectedPhotoModels: [PhotoModel], index: Int, maxSelectImagesCount: Int ) {
@@ -88,13 +90,14 @@ class PhotoShowVC: UIViewController, UICollectionViewDelegate, UICollectionViewD
         self.view.addSubview(BottomBar)
         
         //左下角确定按钮
-        let confirmBtn = UIButton(frame: CGRect(x: width - 50, y: 17, width: 38, height: 18))
+        confirmBtn.frame = CGRect(x: width - 50, y: 17, width: 38, height: 18)
         confirmBtn.setTitle("确定", for: .normal)
         confirmBtn.titleLabel?.font = UIFont.systemFont(ofSize: 18)
         confirmBtn.setTitleColor(PhotoPickConfig.shared.tintColor, for: .normal)
         confirmBtn.backgroundColor = UIColor.clear
         confirmBtn.addTarget(self, action: #selector(confirm), for: .touchUpInside)
         BottomBar.addSubview(confirmBtn)
+        confirmBtn.isHidden = !(selectedPhotoModels.count > 0)
         
         self.showLbl = CircleLabel(frame: CGRect(x: self.view.frame.width - 80, y: 13, width: 25, height: 25))
         
@@ -126,11 +129,11 @@ class PhotoShowVC: UIViewController, UICollectionViewDelegate, UICollectionViewD
     }
         
     @objc private func selectEvent() {
-        if selectedPhotoModels.count >= maxSelectImagesCount {
+        let element = assets[index]
+        if selectedPhotoModels.count >= maxSelectImagesCount && !element.isSelect {
             PhotoPick.showOneCancelButtonAlertView(from: self, title: "可选图片已达上限", subTitle: nil)
             return
         }
-        let element = assets[index]
         element.isSelect = !element.isSelect
         if element.isSelect {
             self.selectedPhotoModels.append(element)
@@ -139,6 +142,7 @@ class PhotoShowVC: UIViewController, UICollectionViewDelegate, UICollectionViewD
             self.selectedPhotoModels.remove(at: i!)
         }
         updateTitle(animate: true)
+        confirmBtn.isHidden = !(selectedPhotoModels.count > 0)
     }
     
     @objc private func popVC(){

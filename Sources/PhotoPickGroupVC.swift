@@ -83,26 +83,35 @@ class PhotoPickGroupVC: UIViewController,UITableViewDelegate,UITableViewDataSour
 }
 
 class GroupCell: UITableViewCell {
-    lazy var subtitle :UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 15)
-        label.textColor = UIColor.groupTableViewBackground
-        return label
-    }()
+    
+    let imageV = UIImageView()
+    let title = UILabel()
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.accessoryType = .disclosureIndicator
-        self.addSubview(subtitle)
 
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        accessoryType = .disclosureIndicator
+        imageV.contentMode = .scaleAspectFill
+        imageV.clipsToBounds = true
+//        imageV.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+        contentView.addSubview(imageV)
+        imageV.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addConstraint(NSLayoutConstraint(item: imageV, attribute: .left, relatedBy: .equal, toItem: contentView, attribute: .left, multiplier: 1.0, constant: 0))
+        contentView.addConstraint(NSLayoutConstraint(item: imageV, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1.0, constant: 0))
+        contentView.addConstraint(NSLayoutConstraint(item: imageV, attribute: .bottom, relatedBy: .equal, toItem: contentView, attribute: .bottom, multiplier: 1.0, constant: 0))
+        contentView.addConstraint(NSLayoutConstraint(item: imageV, attribute: .width, relatedBy: .equal, toItem: imageV, attribute: .height, multiplier: 1.0, constant: 0))
+    
+        contentView.addSubview(title)
+        title.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addConstraint(NSLayoutConstraint(item: title, attribute: .centerY, relatedBy: .equal, toItem: contentView, attribute: .centerY, multiplier: 1.0, constant: 0))
+        contentView.addConstraint(NSLayoutConstraint(item: title, attribute: .left, relatedBy: .equal, toItem: imageV, attribute: .right, multiplier: 1.0, constant: 10))
+        contentView.addConstraint(NSLayoutConstraint(item: title, attribute: .right, relatedBy: .equal, toItem: contentView, attribute: .left, multiplier: 1.0, constant: -10))
     }
     
     func bind(model:PhotoGroup){
-        self.textLabel?.text = model.name()
-        
-        self.imageView?.image = model.image
-        self.imageView?.contentMode = .scaleToFill
-        self.imageView?.clipsToBounds = true
+        self.title.text = model.name()
+        self.imageV.image = model.image
+
         self.detailTextLabel?.text = "(\(model.result.count))"
     }
     
@@ -110,4 +119,5 @@ class GroupCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    
 }
