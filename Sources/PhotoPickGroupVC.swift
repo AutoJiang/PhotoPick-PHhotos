@@ -96,16 +96,16 @@ class GroupCell: UITableViewCell {
 //        imageV.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
         contentView.addSubview(imageV)
         imageV.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addConstraint(NSLayoutConstraint(item: imageV, attribute: .left, relatedBy: .equal, toItem: contentView, attribute: .left, multiplier: 1.0, constant: 0))
-        contentView.addConstraint(NSLayoutConstraint(item: imageV, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1.0, constant: 0))
-        contentView.addConstraint(NSLayoutConstraint(item: imageV, attribute: .bottom, relatedBy: .equal, toItem: contentView, attribute: .bottom, multiplier: 1.0, constant: 0))
+        contentView.addConstraint(NSLayoutConstraint(item: imageV, attribute: .left, relatedBy: .equal, toItem: contentView, attribute: .left, multiplier: 1.0, constant: 2))
+        contentView.addConstraint(NSLayoutConstraint(item: imageV, attribute: .top, relatedBy: .equal, toItem: contentView, attribute: .top, multiplier: 1.0, constant: 2))
+        contentView.addConstraint(NSLayoutConstraint(item: imageV, attribute: .bottom, relatedBy: .equal, toItem: contentView, attribute: .bottom, multiplier: 1.0, constant: -2))
         contentView.addConstraint(NSLayoutConstraint(item: imageV, attribute: .width, relatedBy: .equal, toItem: imageV, attribute: .height, multiplier: 1.0, constant: 0))
     
         contentView.addSubview(title)
         title.translatesAutoresizingMaskIntoConstraints = false
         contentView.addConstraint(NSLayoutConstraint(item: title, attribute: .centerY, relatedBy: .equal, toItem: contentView, attribute: .centerY, multiplier: 1.0, constant: 0))
         contentView.addConstraint(NSLayoutConstraint(item: title, attribute: .left, relatedBy: .equal, toItem: imageV, attribute: .right, multiplier: 1.0, constant: 10))
-        contentView.addConstraint(NSLayoutConstraint(item: title, attribute: .right, relatedBy: .equal, toItem: contentView, attribute: .left, multiplier: 1.0, constant: -10))
+        contentView.addConstraint(NSLayoutConstraint(item: title, attribute: .right, relatedBy: .equal, toItem: contentView, attribute: .right, multiplier: 1.0, constant: -10))
     }
     
     func bind(model:PhotoGroup){

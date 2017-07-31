@@ -89,9 +89,10 @@ class PhotoShowVC: UIViewController, UICollectionViewDelegate, UICollectionViewD
         BottomBar.backgroundColor = UIColor.black.withAlphaComponent(0.8)
         self.view.addSubview(BottomBar)
         
-        //左下角确定按钮
-        confirmBtn.frame = CGRect(x: width - 50, y: 17, width: 38, height: 18)
+        //右下角确定按钮
+        confirmBtn.frame = CGRect(x: width - 100, y: 0, width: 100, height: tabH)
         confirmBtn.setTitle("确定", for: .normal)
+        confirmBtn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 0)
         confirmBtn.titleLabel?.font = UIFont.systemFont(ofSize: 18)
         confirmBtn.setTitleColor(PhotoPickConfig.shared.tintColor, for: .normal)
         confirmBtn.backgroundColor = UIColor.clear
@@ -182,7 +183,7 @@ class PhotoShowVC: UIViewController, UICollectionViewDelegate, UICollectionViewD
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell :BigPhotoCell  = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoPick.bigCell", for: indexPath) as! BigPhotoCell
         let data : PhotoModel = assets[indexPath.row]
-        cell.bind(model: data)
+        cell.bind(model: data, index: indexPath.row)
         return cell
     }
     

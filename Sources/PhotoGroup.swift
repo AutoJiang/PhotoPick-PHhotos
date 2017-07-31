@@ -50,11 +50,8 @@ class PhotoGroup {
             guard let asset = result.firstObject else {
                 return nil
             }
-            
-            let potions = PHImageRequestOptions()
-//            potions.isSynchronous = true
             var imageV: UIImage?
-            PHCachingImageManager.default().requestImage(for: asset, targetSize: CGSize(width: 200, height: 200), contentMode: .aspectFill, options: nil) { (image, info ) in
+            PHCachingImageManager.default().requestImage(for: asset, targetSize: CGSize(width: 300, height: 300), contentMode: .aspectFill, options: nil) { (image, info ) in
 //                let isDegraded = info?[PHImageResultIsDegradedKey] as! Bool
 //                if !isDegraded {
                     imageV = image

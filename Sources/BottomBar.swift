@@ -18,9 +18,10 @@ class BottomBar: UIView {
     
     private let previewBtn: UIButton = {
         //预览按钮
-        let previewBtn = UIButton(frame: CGRect(x: 12, y: 0, width: 38, height: BottomBar.kBottomBarHeight))
+        let previewBtn = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: BottomBar.kBottomBarHeight))
         previewBtn.setTitle("预览", for: .normal)
         previewBtn.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        previewBtn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 40)
         previewBtn.setTitleColor(UIColor.white, for: .normal)
         previewBtn.backgroundColor = UIColor.clear
         previewBtn.addTarget(self, action: #selector(doGoShowPage), for: .touchUpInside)
@@ -54,9 +55,10 @@ class BottomBar: UIView {
         addSubview(previewBtn)
         
         //确定按钮
-        let confirmBtn = UIButton(frame: CGRect(x: width - 50, y: 0, width: 38, height: BottomBar.kBottomBarHeight))
+        let confirmBtn = UIButton(frame: CGRect(x: width - 100, y: 0, width: 100, height: BottomBar.kBottomBarHeight))
         confirmBtn.setTitle("确定", for: .normal)
         confirmBtn.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        confirmBtn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 0)
         confirmBtn.setTitleColor(PhotoPickConfig.shared.tintColor, for: .normal)
         confirmBtn.backgroundColor = UIColor.clear
         confirmBtn.addTarget(self, action: #selector(doOnConfirm), for: .touchUpInside)

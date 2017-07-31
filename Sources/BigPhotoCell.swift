@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Foundation
 
 class BigPhotoCell: UICollectionViewCell,UIAccelerometerDelegate{
     
@@ -17,8 +18,17 @@ class BigPhotoCell: UICollectionViewCell,UIAccelerometerDelegate{
         self.contentView.addSubview(zoomScrollView);
     }
     
-    func bind(model:PhotoModel){
-        model.image { (image) in
+    static var index: Int = 0
+    
+    func bind(model: PhotoModel, index: Int){
+        BigPhotoCell.index = index
+        print("BigPhotoCell.index = \(BigPhotoCell.index)    index = \(index)")
+        model.image(index: index) { (image, idx) in
+            print("BigPhotoCell.index = \(BigPhotoCell.index)    index = \(idx)")
+            guard BigPhotoCell.index == idx else {
+                return
+            }
+            print(Thread.current)
             self.zoomScrollView.frame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: self.frame.size.height)
             self.zoomScrollView.zoomScale = 1.0
             // 将scrollview的contentSize还原成缩放前
@@ -28,7 +38,7 @@ class BigPhotoCell: UICollectionViewCell,UIAccelerometerDelegate{
             self.zoomScrollView.zoomImageView.image = image
             let width = self.frame.width
             let height = (width * CGFloat(model.asset.pixelHeight)) / CGFloat(model.asset.pixelWidth)
-            self.zoomScrollView.zoomImageView.frame.size = CGSize(width: self.frame.width, height: height)
+            self.zoomScrollView.zoomImageView.frame.size = CGSize(width: width, height: height)
             self.zoomScrollView.zoomImageView.center = CGPoint(x: width/2, y: self.frame.height/2)
         }
 
