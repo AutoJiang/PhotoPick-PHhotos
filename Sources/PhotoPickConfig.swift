@@ -23,7 +23,7 @@ public class PhotoPickConfig: NSObject {
     
     /// 当返回JPG图片时自动进行的压缩系数(默认0.5)
     public var jpgQuality: CGFloat = 0.5
-
+    
     /// 最长宽
     public var maxLongSidePixel: CGFloat = 1280
     
@@ -46,7 +46,7 @@ public class PhotoPickConfig: NSObject {
     public var needShowOrder: Bool = true
     
     /// 是否自动清理图片文件缓存
-//    public var isAutoClearDisk: Bool = true
+    public var isAutoClearDisk: Bool = true
     
     //控件颜色
     public var tintColor: UIColor = UIColor.orange
@@ -57,12 +57,7 @@ public class PhotoPickConfig: NSObject {
     //导航栏控件颜色
     public var NaviBarTintColor: UIColor = .black
     
-    /// 是否是长微博
-    public var isLongImage: (_ width: CGFloat, _ height: CGFloat) -> Bool = { (width, height) in
-        if width == 0 || height == 0 {
-            return false
-        }
-        
-        return width/height > 3 || height/width > 3
-    }
+    /// 长图比例系数
+    public var longRate: CGFloat = 3.0
 }
+

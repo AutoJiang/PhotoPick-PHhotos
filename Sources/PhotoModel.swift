@@ -28,25 +28,16 @@ class PhotoModel: NSObject {
     func thumbnail(callBack:@escaping ((UIImage?) -> Void)) -> Void {
         var index = 1000
         PhotoModel.idx = PhotoModel.idx + 1
-        let idx = PhotoModel.idx
-//        print("\(idx)-----start-----\(index)-----\(Thread.current)")
         //param：targetSize 即你想要的图片尺寸，若想要原尺寸则可输入PHImageManagerMaximumSize
-        let imageManager = PHCachingImageManager.default()
-//        imageManager.allowsCachingHighQualityImages = false
 
         self.option.isNetworkAccessAllowed = false
         self.option.isSynchronous = true
         self.option.deliveryMode = .highQualityFormat
-        self.option.progressHandler = { proess, error, stop , info in
-            print("proess -\(proess)")
-            print(error)
-            print(stop)
-            print(info)
-        }
         
-        let height = 320 * CGFloat(asset.pixelHeight)/CGFloat(asset.pixelWidth)
+        let width: CGFloat = 250
+        let height = width * CGFloat(asset.pixelHeight)/CGFloat(asset.pixelWidth)
         
-        PHImageManager.default().requestImage(for: self.asset, targetSize: CGSize(width: 320, height: height), contentMode: .aspectFit, options: self.option) { [weak self] (image, info ) in
+        PHImageManager.default().requestImage(for: self.asset, targetSize: CGSize(width: width, height: height), contentMode: .aspectFit, options: self.option) { [weak self] (image, info ) in
 //                        !isCacell && !isError && !isDegraded
 //            let isCacell = info?[PHImageCancelledKey] as! Bool
 //            let isError = info?[PHImageErrorKey] as! Bool
@@ -74,19 +65,14 @@ class PhotoModel: NSObject {
             }else{
                 self?.isCloud = false
             }
-//            print(info)
-            print(info.count)
             index = index + 1
-//            print("\(idx)-----add-----\(index)-----\(Thread.current)")
         }
-//        print("\(idx)-----end-----\(index)-----\(Thread.current)")
     }
     ///原图
     func originalImage(callBack:@escaping ((UIImage) -> Void)) -> Void {
 //        option.isSynchronous = true
         PHCachingImageManager.default().requestImage(for: asset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFit, options: option) { (image, info) in
             guard let image = image else {
-                print("error")
                 return
             }
             callBack(image)
@@ -102,10 +88,6 @@ class PhotoModel: NSObject {
         option.isSynchronous = false
         //param：targetSize 即你想要的图片尺寸，若想要原尺寸则可输入PHImageManagerMaximumSize
         let quality = PhotoPickConfig.shared.jpgQuality
-//        let size = CGSize(width: CGFloat(asset.pixelWidth)*quality, height: CGFloat(asset.pixelHeight)*quality)
-//        let size = UIScreen.main.bounds.size
-//        let size = CGSize(width: UIScreen.main.bounds.size.width*2, height: UIScreen.main.bounds.height*2)
-//        let size = CGSize(width: 300, height: 300)
         PHCachingImageManager.default().requestImage(for: asset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFit, options: option) { [weak self] (image, info) in
             let isDegraded = info?[PHImageResultIsDegradedKey] as! Bool
             if !isDegraded {

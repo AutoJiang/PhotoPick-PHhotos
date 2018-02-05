@@ -14,7 +14,6 @@ class PhotoZoomScrollView: UIScrollView, UIScrollViewDelegate {
         let imageV = UIImageView()
         imageV.isUserInteractionEnabled = true
         imageV.contentMode = .scaleAspectFit
-        
         return imageV
     }()
     
@@ -22,7 +21,6 @@ class PhotoZoomScrollView: UIScrollView, UIScrollViewDelegate {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(zoomImageView)
-        
         delegate = self
         minimumZoomScale = 1.0
         maximumZoomScale = 3.0

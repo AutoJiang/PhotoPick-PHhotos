@@ -22,14 +22,12 @@ class BigPhotoCell: UICollectionViewCell,UIAccelerometerDelegate{
     
     func bind(model: PhotoModel, index: Int){
         BigPhotoCell.index = index
-        print("BigPhotoCell.index = \(BigPhotoCell.index)    index = \(index)")
         //之前已经加载过的直接拿来用
 //        if let image = model.thumbnail {
 //            setLayoutScrollView(image: image)
 //            return
 //        }
         model.image(index: index) { (image, idx) in
-            print("BigPhotoCell.index = \(BigPhotoCell.index)    index = \(idx)")
             guard BigPhotoCell.index == idx, let image = image else {
                 return
             }
@@ -39,7 +37,6 @@ class BigPhotoCell: UICollectionViewCell,UIAccelerometerDelegate{
     }
     
     func setLayoutScrollView(image: UIImage) -> Void {
-        print(Thread.current)
         self.zoomScrollView.frame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: self.frame.size.height)
         self.zoomScrollView.zoomScale = 1.0
         // 将scrollview的contentSize还原成缩放前

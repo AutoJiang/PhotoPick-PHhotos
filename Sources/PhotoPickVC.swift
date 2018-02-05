@@ -30,6 +30,36 @@ public class PhotoPickVC: UIViewController, UICollectionViewDelegate, UICollecti
     
     private let groupManager = PhotoGroupManager()
     
+    private lazy var menuBtn: TitleButton = {
+        let btn = TitleButton(frame: CGRect(x: 0, y: 0, width: 120, height: 30))
+        btn.setTitle("所有照片", for: .normal)
+        btn.setTitleColor(UIColor.black, for: .normal)
+        btn.setImage(UIImage(named: "PhotoPick.bundle/icon_home_head_drop_arrow"), for: .normal)
+        //        btn.imageEdgeInsets = UIEdgeInsets(top: 0, left: 50, bottom: 0, right: -50)
+        btn.addTarget(self, action: #selector(titleViewOnClick), for: .touchUpInside)
+        return btn
+    }()
+    
+    lazy private var  groupVC: PhotoPickGroupVC = {
+        let vc = PhotoPickGroupVC()
+        vc.cancelBack = { [unowned self] array in
+            self.selectedPhotoModels = array
+        }
+        vc.confirmDismiss = { [unowned self] aassetImages in
+            self.performPickDelegate(assetImages: aassetImages)
+            self.dismissVC(isCancel: false)
+        }
+        vc.bgViewOnClick = { [unowned self] in
+            self.titleViewOnClick(btn: self.menuBtn)
+        }
+        vc.selectedCallBack = { [unowned self] group in
+            self.photoModels = self.groupManager.findAllPhotoModelsByGroup(by: group)
+            self.titleViewOnClick(btn: self.menuBtn)
+            self.menuBtn.setTitle(group.name(), for: .normal)
+        }
+        return vc
+    }()
+    
     private lazy var collectionView : UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -123,35 +153,34 @@ public class PhotoPickVC: UIViewController, UICollectionViewDelegate, UICollecti
         switch sourceType {
         case .all:
             setupNavigationItemsForSourceTypeAll()
-            self.photoModels = groupManager.findAllPhotoModels()
+            self.photoModels = self.groupManager.findAllPhotoModels()
+            
         case let .group(photoGroup: group):
-            self.photoModels = groupManager.findAllPhotoModelsByGroup(by: group)
+            self.photoModels = self.groupManager.findAllPhotoModelsByGroup(by: group)
+            self.menuBtn.setTitle(group.name(), for: .normal)
         }
-        
-        /// 注册通知，监听系统图片发生变化时，进行数据更新
-//        NotificationCenter.default.addObserver(self, selector: #selector(assetsLibraryChanged), name: NSNotification.Name.ALAssetsLibraryChanged, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        addChildViewController(groupVC)
     }
-    
-    
     
     private func setupNavigationItemsForSourceTypeAll(){
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "取消", style: .plain, target: self, action: #selector(cancelBtnOnClick))
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "相册", style: .plain, target: self, action: #selector(openGroupPhotoVC))
-
+        
+        let itemView =  UIBarButtonItem(customView: menuBtn)
+        navigationItem.titleView = itemView.customView
     }
     
-    // 打开相册列表
-    @objc private func openGroupPhotoVC() {
-        let groupVC =  PhotoPickGroupVC()
-        groupVC.cancelBack = { [unowned self] array in
-            self.selectedPhotoModels = array
+    func titleViewOnClick(btn: UIButton) {
+        //        UIView.animate(withDuration: 0.2) {
+        btn.imageView?.transform = btn.isSelected ? CGAffineTransform.identity : CGAffineTransform(rotationAngle: CGFloat(-Double.pi))
+        //        }
+        btn.isSelected = !btn.isSelected
+        //        btn.isSelected ? openGroupPhotoVC(): closeGroupPhotoVC()
+        if btn.isSelected {
+            view.addSubview(groupVC.view)
+            groupVC.showView()
+        }else{
+            groupVC.hideView()
         }
-        groupVC.confirmDismiss = { [unowned self] aassetImages in
-            self.performPickDelegate(assetImages: aassetImages)
-            self.dismissVC(isCancel: false)
-        }
-        self.navigationController?.pushViewController(groupVC, animated: true)
     }
     
     private func performPickDelegate(assetImages:[PickedPhoto]){
@@ -184,7 +213,7 @@ public class PhotoPickVC: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     // MARK: - UICollectionViewDelegate
-
+    
     public func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -201,6 +230,9 @@ public class PhotoPickVC: UIViewController, UICollectionViewDelegate, UICollecti
                 self.dismissVC(isCancel: false)
                 self.dismissVC(isCancel: false)
             }
+            cell.cancelTakePhoto = {
+                self.dismissVC(isCancel: false)
+            }
             cell.host = self
             return cell
         }
@@ -209,11 +241,9 @@ public class PhotoPickVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         let model: PhotoModel = photoModels[getPhotoRow(indexPath: indexPath)]
         model.thumbnail { (image) in
-            print("type = \(Float((model.asset.sourceType).rawValue))")
             cell.bind(image: image, isCloud: model.isCloud)
         }
-//        cell.bind(image: model.thumbnail)
-        
+
         if model.isSelect {
             let index = self.selectedPhotoModels.index(of: model)
             cell.cellSelect(animated: model.isLastSelect, index: "\(index!+1)")
@@ -231,8 +261,8 @@ public class PhotoPickVC: UIViewController, UICollectionViewDelegate, UICollecti
                 photoCell.cellUnselect()
                 model.isSelect = false
             }
-            
-            //选中
+                
+                //选中
             else if self.selectedPhotoModels.count < self.config.maxSelectImagesCount {
                 self.selectedPhotoModels.append(model)
                 model.isSelect = true
@@ -272,7 +302,18 @@ public class PhotoPickVC: UIViewController, UICollectionViewDelegate, UICollecti
         fatalError("init(coder:) has not been implemented")
     }
     
-//    deinit {
-//        NotificationCenter.default.removeObserver(self)
-//    }
 }
+
+class TitleButton: UIButton {
+    
+    override func setTitle(_ title: String?, for state: UIControlState) {
+        super.setTitle(title, for: state)
+        self.layoutSubviews()
+    }
+    
+    override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
+        let rect = titleRect(forContentRect: contentRect)
+        return CGRect(x: rect.maxX + 5, y: rect.origin.y + 7, width: 10 , height: 6.5)
+    }
+}
+

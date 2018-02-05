@@ -20,6 +20,8 @@ public class PickedPhoto: NSObject {
     private let maxSidePixels: CGFloat = 1280
     private let minStretchSidePixels: CGFloat = 440
     
+    static let path = "/Documents/PhotoPick/"
+    
     ///原图
     public func originalImage(callBack:@escaping ((UIImage?) -> Void)) -> Void {
         guard let asset = asset else {
@@ -98,4 +100,12 @@ public class PickedPhoto: NSObject {
         self.isGIF = false
     }
     
+    static func clearDisk(){
+        let fileManager = FileManager.default
+        let imagesPath: String = NSHomeDirectory() + PickedPhoto.path
+        do {
+            try fileManager.removeItem(atPath: imagesPath)
+        } catch {
+        }
+    }
 }

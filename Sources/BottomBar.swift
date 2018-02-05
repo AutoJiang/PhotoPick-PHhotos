@@ -16,7 +16,7 @@ class BottomBar: UIView {
     
     var onConfirm = {}
     
-    private let previewBtn: UIButton = {
+    private lazy var previewBtn: UIButton = {
         //预览按钮
         let previewBtn = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: BottomBar.kBottomBarHeight))
         previewBtn.setTitle("预览", for: .normal)
