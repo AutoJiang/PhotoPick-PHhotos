@@ -21,10 +21,12 @@ class PhotoCell: UICollectionViewCell {
         addSubview(selectBtn)
         addSubview(ivMaskView)
         addSubview(indexLbl)
+        addSubview(cloudMaskView)
     }
     
-    public func bind(image: UIImage?){
+    public func bind(image: UIImage?, isCloud: Bool){
         iv.image = image
+        cloudMaskView.isHidden = !isCloud
     }
     
     public func cellUnselect(){
@@ -68,6 +70,15 @@ class PhotoCell: UICollectionViewCell {
         maskView.backgroundColor = UIColor.black
         maskView.alpha = 0.3
         maskView.isUserInteractionEnabled = false
+        maskView.isHidden = true
+        return maskView
+    }()
+    
+    private lazy var cloudMaskView: UIView = {
+        let maskView:UIView = UIView(frame: self.bounds)
+        maskView.backgroundColor = UIColor.red
+        maskView.alpha = 0.5
+        maskView.isUserInteractionEnabled = true
         maskView.isHidden = true
         return maskView
     }()

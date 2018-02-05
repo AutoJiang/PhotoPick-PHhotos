@@ -70,6 +70,7 @@ class PhotoGroupManager {
         var groups = Array<PhotoGroup>()
         let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: groupType, options: nil)
         let options = PHFetchOptions()
+        options.includeAssetSourceTypes = .typeUserLibrary
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         smartAlbums.enumerateObjects({ (collection, idx, stop) in
         let result = PHAsset.fetchAssets(in: collection, options: options)

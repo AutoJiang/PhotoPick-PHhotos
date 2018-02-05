@@ -18,7 +18,9 @@ class PhotoModel: NSObject {
 
     static var idx = 0
     
-    private var thumbnail: UIImage?
+    var thumbnail: UIImage?
+    
+    var isCloud: Bool = false
     
     private var image: UIImage?
     
@@ -27,26 +29,57 @@ class PhotoModel: NSObject {
         var index = 1000
         PhotoModel.idx = PhotoModel.idx + 1
         let idx = PhotoModel.idx
-        print("\(idx)-----start-----\(index)-----\(Thread.current)")
+//        print("\(idx)-----start-----\(index)-----\(Thread.current)")
         //param：targetSize 即你想要的图片尺寸，若想要原尺寸则可输入PHImageManagerMaximumSize
         let imageManager = PHCachingImageManager.default()
 //        imageManager.allowsCachingHighQualityImages = false
-//        downloadFinined = ![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey] && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue];
 
-        let height = 200 * CGFloat(asset.pixelHeight)/CGFloat(asset.pixelWidth)
-        imageManager.requestImage(for: self.asset, targetSize: CGSize(width: 200, height: height), contentMode: .aspectFit, options: self.option) { [weak self] (image, info ) in
+        self.option.isNetworkAccessAllowed = false
+        self.option.isSynchronous = true
+        self.option.deliveryMode = .highQualityFormat
+        self.option.progressHandler = { proess, error, stop , info in
+            print("proess -\(proess)")
+            print(error)
+            print(stop)
+            print(info)
+        }
+        
+        let height = 320 * CGFloat(asset.pixelHeight)/CGFloat(asset.pixelWidth)
+        
+        PHImageManager.default().requestImage(for: self.asset, targetSize: CGSize(width: 320, height: height), contentMode: .aspectFit, options: self.option) { [weak self] (image, info ) in
 //                        !isCacell && !isError && !isDegraded
 //            let isCacell = info?[PHImageCancelledKey] as! Bool
 //            let isError = info?[PHImageErrorKey] as! Bool
-            let isDegraded = info?[PHImageResultIsDegradedKey] as! Bool
+            guard let info = info else {
+                return
+            }
+
+            let isDegraded = info[PHImageResultIsDegradedKey] as! Bool
             if !isDegraded {
                 self?.thumbnail = image
             }
             callBack(self?.thumbnail)
+            
+            if info.keys.contains(PHImageResultIsInCloudKey) {
+//                self?.isCloud = !(info[PHImageResultIsInCloudKey] != nil)
+                self?.isCloud = info[PHImageResultIsInCloudKey] as! Bool
+//                let isCancelled = info[PHImageCancelledKey] as! Bool
+//                let isError = info[PHImageErrorKey] as! Bool
+                let isDegraded = info[PHImageResultIsDegradedKey] as! Bool
+                if !isDegraded {
+                    self?.isCloud = false
+                }else{
+                    self?.isCloud = true
+                }
+            }else{
+                self?.isCloud = false
+            }
+//            print(info)
+            print(info.count)
             index = index + 1
-            print("\(idx)-----add-----\(index)-----\(Thread.current)")
+//            print("\(idx)-----add-----\(index)-----\(Thread.current)")
         }
-        print("\(idx)-----end-----\(index)-----\(Thread.current)")
+//        print("\(idx)-----end-----\(index)-----\(Thread.current)")
     }
     ///原图
     func originalImage(callBack:@escaping ((UIImage) -> Void)) -> Void {
@@ -72,6 +105,7 @@ class PhotoModel: NSObject {
 //        let size = CGSize(width: CGFloat(asset.pixelWidth)*quality, height: CGFloat(asset.pixelHeight)*quality)
 //        let size = UIScreen.main.bounds.size
 //        let size = CGSize(width: UIScreen.main.bounds.size.width*2, height: UIScreen.main.bounds.height*2)
+//        let size = CGSize(width: 300, height: 300)
         PHCachingImageManager.default().requestImage(for: asset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFit, options: option) { [weak self] (image, info) in
             let isDegraded = info?[PHImageResultIsDegradedKey] as! Bool
             if !isDegraded {
@@ -90,12 +124,6 @@ class PhotoModel: NSObject {
         option.deliveryMode = .opportunistic
         option.isSynchronous = false
         super.init()
-        
-//        let imageManager = PHCachingImageManager.default()
-//        let height = 200 * CGFloat(asset.pixelHeight)/CGFloat(asset.pixelWidth)
-//        imageManager.requestImage(for: asset, targetSize: CGSize(width: 200, height: height), contentMode: .aspectFit, options: option) { (image, info ) in
-//            self.thumbnail = image
-//        }
     }
 
     override func isEqual(_ object: Any?) -> Bool {

@@ -209,7 +209,8 @@ public class PhotoPickVC: UIViewController, UICollectionViewDelegate, UICollecti
         
         let model: PhotoModel = photoModels[getPhotoRow(indexPath: indexPath)]
         model.thumbnail { (image) in
-            cell.bind(image: image)
+            print("type = \(Float((model.asset.sourceType).rawValue))")
+            cell.bind(image: image, isCloud: model.isCloud)
         }
 //        cell.bind(image: model.thumbnail)
         

@@ -31,17 +31,24 @@
 		C9943DD41EA4A98D00D88CCF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9943DD21EA4A98D00D88CCF /* LaunchScreen.storyboard */; };
 		C9A297541EA78F85008EDF1F /* PhotoPick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* PhotoPick.framework */; };
 		C9A297551EA78F85008EDF1F /* PhotoPick.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* PhotoPick.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C9FE9DAF1FF38CDE0001D3C2 /* AssetTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE58A1EA072B300E2167C /* AssetTool.swift */; };
+		C9FE9DB01FF38CDE0001D3C2 /* UIImageExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE58B1EA072B300E2167C /* UIImageExt.swift */; };
+		C9FE9DB11FF38CDE0001D3C2 /* BigPhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE58C1EA072B300E2167C /* BigPhotoCell.swift */; };
+		C9FE9DB21FF38CDE0001D3C2 /* BottomBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE58D1EA072B300E2167C /* BottomBar.swift */; };
+		C9FE9DB31FF38CDE0001D3C2 /* CameraCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE58E1EA072B300E2167C /* CameraCell.swift */; };
+		C9FE9DB41FF38CDE0001D3C2 /* CircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE58F1EA072B300E2167C /* CircleButton.swift */; };
+		C9FE9DB51FF38CDE0001D3C2 /* CircleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE5901EA072B300E2167C /* CircleLabel.swift */; };
+		C9FE9DB61FF38CDE0001D3C2 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE5911EA072B300E2167C /* PhotoCell.swift */; };
+		C9FE9DB71FF38CDE0001D3C2 /* PhotoGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE5921EA072B300E2167C /* PhotoGroup.swift */; };
+		C9FE9DB81FF38CDE0001D3C2 /* PhotoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE5931EA072B300E2167C /* PhotoModel.swift */; };
+		C9FE9DB91FF38CDE0001D3C2 /* PhotoPickConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE5941EA072B300E2167C /* PhotoPickConfig.swift */; };
+		C9FE9DBA1FF38CDE0001D3C2 /* PhotoPickGroupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE5951EA072B300E2167C /* PhotoPickGroupVC.swift */; };
+		C9FE9DBB1FF38CDE0001D3C2 /* PhotoPickVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE5961EA072B300E2167C /* PhotoPickVC.swift */; };
+		C9FE9DBC1FF38CDE0001D3C2 /* PhotoShowVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE5971EA072B300E2167C /* PhotoShowVC.swift */; };
+		C9FE9DBD1FF38CDE0001D3C2 /* PhotoZoomScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE5981EA072B300E2167C /* PhotoZoomScrollView.swift */; };
+		C9FE9DBE1FF38CDE0001D3C2 /* PickedPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE5991EA072B300E2167C /* PickedPhoto.swift */; };
+		C9FE9DBF1FF38CDE0001D3C2 /* PhotoPick.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE59A1EA072B300E2167C /* PhotoPick.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		C9A297561EA78F85008EDF1F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = OBJ_1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = OBJ_15;
-			remoteInfo = PhotoPick;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		C9A297581EA78F85008EDF1F /* Embed Frameworks */ = {
@@ -188,7 +195,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				C9A297571EA78F85008EDF1F /* PBXTargetDependency */,
 			);
 			name = Demo;
 			productName = Demo;
@@ -268,6 +274,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9FE9DAF1FF38CDE0001D3C2 /* AssetTool.swift in Sources */,
+				C9FE9DB01FF38CDE0001D3C2 /* UIImageExt.swift in Sources */,
+				C9FE9DB11FF38CDE0001D3C2 /* BigPhotoCell.swift in Sources */,
+				C9FE9DB21FF38CDE0001D3C2 /* BottomBar.swift in Sources */,
+				C9FE9DB31FF38CDE0001D3C2 /* CameraCell.swift in Sources */,
+				C9FE9DB41FF38CDE0001D3C2 /* CircleButton.swift in Sources */,
+				C9FE9DB51FF38CDE0001D3C2 /* CircleLabel.swift in Sources */,
+				C9FE9DB61FF38CDE0001D3C2 /* PhotoCell.swift in Sources */,
+				C9FE9DB71FF38CDE0001D3C2 /* PhotoGroup.swift in Sources */,
+				C9FE9DB81FF38CDE0001D3C2 /* PhotoModel.swift in Sources */,
+				C9FE9DB91FF38CDE0001D3C2 /* PhotoPickConfig.swift in Sources */,
+				C9FE9DBA1FF38CDE0001D3C2 /* PhotoPickGroupVC.swift in Sources */,
+				C9FE9DBB1FF38CDE0001D3C2 /* PhotoPickVC.swift in Sources */,
+				C9FE9DBC1FF38CDE0001D3C2 /* PhotoShowVC.swift in Sources */,
+				C9FE9DBD1FF38CDE0001D3C2 /* PhotoZoomScrollView.swift in Sources */,
+				C9FE9DBE1FF38CDE0001D3C2 /* PickedPhoto.swift in Sources */,
+				C9FE9DBF1FF38CDE0001D3C2 /* PhotoPick.swift in Sources */,
 				C9943DCC1EA4A98D00D88CCF /* ViewController.swift in Sources */,
 				C9943DCA1EA4A98D00D88CCF /* AppDelegate.swift in Sources */,
 			);
@@ -298,14 +321,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		C9A297571EA78F85008EDF1F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = OBJ_15 /* PhotoPick */;
-			targetProxy = C9A297561EA78F85008EDF1F /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		C9943DCD1EA4A98D00D88CCF /* Main.storyboard */ = {
@@ -368,7 +383,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Demo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = cc.jat.Demo;
@@ -419,7 +434,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = Demo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = cc.jat.Demo;
@@ -447,6 +462,7 @@
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/Demo/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9;
 				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
@@ -478,6 +494,7 @@
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/Demo/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9;
 				LD_RUNPATH_SEARCH_PATHS = "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx";
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "$(inherited)";
