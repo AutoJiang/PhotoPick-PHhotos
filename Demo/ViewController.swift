@@ -7,7 +7,7 @@
 //
 
 import UIKit
-//import PhotoPick
+import PhotoPick
 
 class ViewController: UIViewController, PhotoPickDelegate {
     

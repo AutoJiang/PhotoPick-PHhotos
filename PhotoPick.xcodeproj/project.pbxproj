@@ -25,6 +25,7 @@
 		C93DE5AA1EA072B300E2167C /* PickedPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE5991EA072B300E2167C /* PickedPhoto.swift */; };
 		C93DE5AB1EA072B300E2167C /* PhotoPick.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE59A1EA072B300E2167C /* PhotoPick.swift */; };
 		C943A79420282E970051B298 /* PhotoPick.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C943A79320282E970051B298 /* PhotoPick.bundle */; };
+		C943A79620284B8A0051B298 /* PhotoPick.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C943A79320282E970051B298 /* PhotoPick.bundle */; };
 		C9943DCA1EA4A98D00D88CCF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9943DC91EA4A98D00D88CCF /* AppDelegate.swift */; };
 		C9943DCC1EA4A98D00D88CCF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9943DCB1EA4A98D00D88CCF /* ViewController.swift */; };
 		C9943DCF1EA4A98D00D88CCF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9943DCD1EA4A98D00D88CCF /* Main.storyboard */; };
@@ -32,23 +33,6 @@
 		C9943DD41EA4A98D00D88CCF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C9943DD21EA4A98D00D88CCF /* LaunchScreen.storyboard */; };
 		C9A297541EA78F85008EDF1F /* PhotoPick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* PhotoPick.framework */; };
 		C9A297551EA78F85008EDF1F /* PhotoPick.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* PhotoPick.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		C9FE9DAF1FF38CDE0001D3C2 /* AssetTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE58A1EA072B300E2167C /* AssetTool.swift */; };
-		C9FE9DB01FF38CDE0001D3C2 /* UIImageExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE58B1EA072B300E2167C /* UIImageExt.swift */; };
-		C9FE9DB11FF38CDE0001D3C2 /* BigPhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE58C1EA072B300E2167C /* BigPhotoCell.swift */; };
-		C9FE9DB21FF38CDE0001D3C2 /* BottomBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE58D1EA072B300E2167C /* BottomBar.swift */; };
-		C9FE9DB31FF38CDE0001D3C2 /* CameraCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE58E1EA072B300E2167C /* CameraCell.swift */; };
-		C9FE9DB41FF38CDE0001D3C2 /* CircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE58F1EA072B300E2167C /* CircleButton.swift */; };
-		C9FE9DB51FF38CDE0001D3C2 /* CircleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE5901EA072B300E2167C /* CircleLabel.swift */; };
-		C9FE9DB61FF38CDE0001D3C2 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE5911EA072B300E2167C /* PhotoCell.swift */; };
-		C9FE9DB71FF38CDE0001D3C2 /* PhotoGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE5921EA072B300E2167C /* PhotoGroup.swift */; };
-		C9FE9DB81FF38CDE0001D3C2 /* PhotoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE5931EA072B300E2167C /* PhotoModel.swift */; };
-		C9FE9DB91FF38CDE0001D3C2 /* PhotoPickConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE5941EA072B300E2167C /* PhotoPickConfig.swift */; };
-		C9FE9DBA1FF38CDE0001D3C2 /* PhotoPickGroupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE5951EA072B300E2167C /* PhotoPickGroupVC.swift */; };
-		C9FE9DBB1FF38CDE0001D3C2 /* PhotoPickVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE5961EA072B300E2167C /* PhotoPickVC.swift */; };
-		C9FE9DBC1FF38CDE0001D3C2 /* PhotoShowVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE5971EA072B300E2167C /* PhotoShowVC.swift */; };
-		C9FE9DBD1FF38CDE0001D3C2 /* PhotoZoomScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE5981EA072B300E2167C /* PhotoZoomScrollView.swift */; };
-		C9FE9DBE1FF38CDE0001D3C2 /* PickedPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE5991EA072B300E2167C /* PickedPhoto.swift */; };
-		C9FE9DBF1FF38CDE0001D3C2 /* PhotoPick.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93DE59A1EA072B300E2167C /* PhotoPick.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -210,6 +194,7 @@
 			buildPhases = (
 				OBJ_19 /* Sources */,
 				OBJ_21 /* Frameworks */,
+				C943A79520284B830051B298 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -260,6 +245,14 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		C943A79520284B830051B298 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C943A79620284B8A0051B298 /* PhotoPick.bundle in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C9943DC51EA4A98D00D88CCF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -278,23 +271,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C9FE9DAF1FF38CDE0001D3C2 /* AssetTool.swift in Sources */,
-				C9FE9DB01FF38CDE0001D3C2 /* UIImageExt.swift in Sources */,
-				C9FE9DB11FF38CDE0001D3C2 /* BigPhotoCell.swift in Sources */,
-				C9FE9DB21FF38CDE0001D3C2 /* BottomBar.swift in Sources */,
-				C9FE9DB31FF38CDE0001D3C2 /* CameraCell.swift in Sources */,
-				C9FE9DB41FF38CDE0001D3C2 /* CircleButton.swift in Sources */,
-				C9FE9DB51FF38CDE0001D3C2 /* CircleLabel.swift in Sources */,
-				C9FE9DB61FF38CDE0001D3C2 /* PhotoCell.swift in Sources */,
-				C9FE9DB71FF38CDE0001D3C2 /* PhotoGroup.swift in Sources */,
-				C9FE9DB81FF38CDE0001D3C2 /* PhotoModel.swift in Sources */,
-				C9FE9DB91FF38CDE0001D3C2 /* PhotoPickConfig.swift in Sources */,
-				C9FE9DBA1FF38CDE0001D3C2 /* PhotoPickGroupVC.swift in Sources */,
-				C9FE9DBB1FF38CDE0001D3C2 /* PhotoPickVC.swift in Sources */,
-				C9FE9DBC1FF38CDE0001D3C2 /* PhotoShowVC.swift in Sources */,
-				C9FE9DBD1FF38CDE0001D3C2 /* PhotoZoomScrollView.swift in Sources */,
-				C9FE9DBE1FF38CDE0001D3C2 /* PickedPhoto.swift in Sources */,
-				C9FE9DBF1FF38CDE0001D3C2 /* PhotoPick.swift in Sources */,
 				C9943DCC1EA4A98D00D88CCF /* ViewController.swift in Sources */,
 				C9943DCA1EA4A98D00D88CCF /* AppDelegate.swift in Sources */,
 			);
