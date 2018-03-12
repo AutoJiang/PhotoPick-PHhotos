@@ -77,7 +77,8 @@ class PhotoPickGroupVC: UIViewController,UITableViewDelegate,UITableViewDataSour
             return
         }
         UIView.animate(withDuration: 0.3) {
-            self.tableView.frame = CGRect(x: 0, y: 64, width: size.width, height: size.height)
+            self.tableView.frame = CGRect(x: 0, y: self.navigationController?.navigationBar.frame.maxY ?? 64, width: size.width, height: size.height)
+
         }
     }
     
@@ -118,7 +119,6 @@ class PhotoPickGroupVC: UIViewController,UITableViewDelegate,UITableViewDataSour
         let group = self.groups[indexPath.row]
         selectedCallBack(group)
         PhotoPickGroupVC.currentIndex = indexPath.row
-        self.tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
     }
     

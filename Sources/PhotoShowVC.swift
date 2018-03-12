@@ -10,7 +10,7 @@ import UIKit
 
 //大图显示控制器
 class PhotoShowVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
-    private let tabH: CGFloat = 50
+    private let tabH: CGFloat = 40 + (isIphoneX ? 34.0 : 0)
     private var collectionView: UICollectionView?
     private var showLbl = CircleLabel()
     private var assets: [PhotoModel]
