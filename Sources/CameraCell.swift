@@ -13,7 +13,7 @@ class CameraCell: UICollectionViewCell, UIImagePickerControllerDelegate, UINavig
     
     static let identifier = "CameraCell"
     
-    weak var host: UIViewController?
+    weak var host: PhotoPickVC?
     
     var doneTakePhoto: ([PickedPhoto]) -> Void = {_ in }
     var cancelTakePhoto: () -> Void = {_ in}
@@ -60,6 +60,10 @@ class CameraCell: UICollectionViewCell, UIImagePickerControllerDelegate, UINavig
     
     func tapGesture() {
         guard let vc = host else {
+            return
+        }
+        if vc.selectedPhotoModels.count >= PhotoPickConfig.shared.maxSelectImagesCount {
+            PhotoPick.showOneCancelButtonAlertView(from: vc, title: "可选图片已达上限", subTitle: nil)
             return
         }
         let authStatus = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)

@@ -112,7 +112,7 @@ public class PhotoPickVC: UIViewController, UICollectionViewDelegate, UICollecti
         }
     }
     
-    private var selectedPhotoModels = [PhotoModel]() {
+    public var selectedPhotoModels = [PhotoModel]() {
         didSet{
             bottomBar.updatePickedPhotoCount(count: selectedPhotoModels.count)
             collectionView.reloadData()
@@ -226,7 +226,9 @@ public class PhotoPickVC: UIViewController, UICollectionViewDelegate, UICollecti
         if indexPath.row == 0 && sourceType.hasCamera {
             let cell: CameraCell =  collectionView.dequeueReusableCell(withReuseIdentifier: CameraCell.identifier, for: indexPath) as! CameraCell
             cell.doneTakePhoto = { [unowned self] models  in
-                self.performPickDelegate(assetImages: models)
+                var pickedPhotos = PhotoModel.convertToPickedPhotos(photoModels: self.selectedPhotoModels)
+                pickedPhotos.append(contentsOf: models)
+                self.performPickDelegate(assetImages: pickedPhotos)
                 self.dismissVC(isCancel: false)
                 self.dismissVC(isCancel: false)
             }

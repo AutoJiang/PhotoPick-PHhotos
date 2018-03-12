@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-class PhotoModel: NSObject {
+public class PhotoModel: NSObject {
     var asset: PHAsset
     var isSelect: Bool = false
     var isLastSelect: Bool = false
@@ -108,7 +108,7 @@ class PhotoModel: NSObject {
         super.init()
     }
 
-    override func isEqual(_ object: Any?) -> Bool {
+    override public func isEqual(_ object: Any?) -> Bool {
         let obj = object as! PhotoModel
         return obj.asset == self.asset
     }
